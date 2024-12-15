@@ -1,136 +1,169 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
-class Program
+public enum Grade
 {
-    static void Main()
+    A, B, C, D, E, F
+}
+
+public class Student
+{
+    public Guid Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int GradeLevel { get; set; }
+    public Grade Grade { get; set; }
+
+    public Student(string firstName, string lastName, int gradeLevel, Grade grade)
     {
-        Console.WriteLine("Choose a task to run (1, 2, 3, or 4):");
-        Console.WriteLine("1 - Palindrome Check");
-        Console.WriteLine("2 - Temperature Conversion");
-        Console.WriteLine("3 - Sort Numbers");
-        Console.WriteLine("4 - Character Frequency Count");
-        Console.Write("Enter your choice: ");
-        string choice = Console.ReadLine();
+        Id = Guid.NewGuid();
+        FirstName = firstName;
+        LastName = lastName;
+        GradeLevel = gradeLevel;
+        Grade = grade;
+    }
+}
+
+public class Car
+{
+    public string Brand { get; set; }
+    public string Model { get; set; }
+    public decimal Price { get; set; }
+
+    public Car(string brand, string model, decimal price)
+    {
+        Brand = brand;
+        Model = model;
+        Price = price;
+    }
+}
+
+public class Boxer
+{
+    public Guid Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public int Age { get; set; }
+    public decimal Weight { get; set; }
+
+    public Boxer(string firstName, string lastName, int age, decimal weight)
+    {
+        Id = Guid.NewGuid();
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+        Weight = weight;
+    }
+}
+
+public class Program
+{
+    public static void Main()
+    {
+        List<Student> students = new List<Student>
+        {
+            new Student("Ali", "Veli", 9, Grade.A),
+            new Student("Zafar", "Tashkent", 10, Grade.B),
+            new Student("Nodir", "Yusufov", 11, Grade.C),
+            new Student("Shaxzod", "Abdullayev", 9, Grade.A),
+            new Student("Olim", "Rakhmonov", 10, Grade.D)
+        };
+
+        List<Car> cars = new List<Car>
+        {
+            new Car("Toyota", "Corolla", 18000m),
+            new Car("Honda", "Civic", 20000m),
+            new Car("Ford", "Fiesta", 15000m),
+            new Car("BMW", "X5", 50000m),
+            new Car("Audi", "A3", 22000m)
+        };
+
+        List<Boxer> boxers = new List<Boxer>
+        {
+            new Boxer("Shavkat", "Mirziyoyev", 28, 48),
+            new Boxer("Abdulloh", "Iskandarov", 30, 55),
+            new Boxer("Alisher", "Qodirov", 26, 95),
+            new Boxer("Kamol", "Asqarov", 32, 72),
+            new Boxer("Botir", "Shamsiev", 25, 91)
+        };
+
+        Console.WriteLine("Tanlang:");
+        Console.WriteLine("1. O'quvchilarni bahosi bo'yicha filtrlash");
+        Console.WriteLine("2. Avtomobillarni narx oraliqda filtrlash");
+        Console.WriteLine("3. Bokschilarni vazniga qarab saralash");
+        int choice = int.Parse(Console.ReadLine());
 
         switch (choice)
         {
-            case "1":
-                PalindromeCheck();
-                break;
-            case "2":
-                TemperatureConversion();
-                break;
-            case "3":
-                SortNumbers();
-                break;
-            case "4":
-                CharacterFrequencyCount();
-                break;
-            default:
-                Console.WriteLine("Invalid choice. Please run the program again.");
-                break;
-        }
-    }
-
-    static void PalindromeCheck()
-    {
-        Console.Write("Enter a word or phrase: ");
-        string input = Console.ReadLine().ToLower().Replace(" ", ""); // Normalize input
-        string reversed = new string(input.Reverse().ToArray());
-
-        if (input == reversed)
-        {
-            Console.WriteLine("Palindrome");
-        }
-        else
-        {
-            Console.WriteLine("Not a Palindrome");
-        }
-    }
-
-    static void TemperatureConversion()
-    {
-        Console.Write("Enter temperature in Celsius: ");
-        double celsius = double.Parse(Console.ReadLine());
-
-        Console.WriteLine("Choose the conversion:");
-        Console.WriteLine("1 - Fahrenheit");
-        Console.WriteLine("2 - Kelvin");
-        Console.Write("Enter your choice: ");
-        string tempChoice = Console.ReadLine();
-
-        switch (tempChoice)
-        {
-            case "1":
-                double fahrenheit = celsius * 9 / 5 + 32;
-                Console.WriteLine($"Celsius: {celsius}, Fahrenheit: {fahrenheit:F1}");
+            case 1:
+                Console.Write("Bahoni kiriting (A, B, C, D, E, F): ");
+                string inputGrade = Console.ReadLine();
+                if (Enum.TryParse(inputGrade, out Grade grade))
+                {
+                    Console.WriteLine($"Bahosi {grade} bo'lgan o'quvchilar:");
+                    foreach (var student in students)
+                    {
+                        if (student.Grade == grade)
+                        {
+                            Console.WriteLine($"{student.FirstName} {student.LastName} - {student.GradeLevel}-sinf");
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Noto'g'ri baho kiritildi.");
+                }
                 break;
 
-            case "2":
-                double kelvin = celsius + 273.15;
-                Console.WriteLine($"Celsius: {celsius}, Kelvin: {kelvin:F2}");
+            case 2:
+                Console.Write("Birinchi narxni kiriting: ");
+                decimal price1 = decimal.Parse(Console.ReadLine());
+
+                Console.Write("Ikkinchi narxni kiriting: ");
+                decimal price2 = decimal.Parse(Console.ReadLine());
+
+                Console.WriteLine("Narx oraliqda joylashgan avtomobillar:");
+                foreach (var car in cars)
+                {
+                    if (car.Price >= price1 && car.Price <= price2)
+                    {
+                        Console.WriteLine($"Brand: {car.Brand}, Model: {car.Model}, Price: {car.Price:C}");
+                    }
+                }
                 break;
 
-            default:
-                Console.WriteLine("Invalid choice.");
-                break;
-        }
-    }
+            case 3:
+                Console.WriteLine("Yengil vaznli bokschilar (50 kg gacha):");
+                foreach (var boxer in boxers)
+                {
+                    if (boxer.Weight <= 50)
+                    {
+                        Console.WriteLine($"{boxer.FirstName} {boxer.LastName} - {boxer.Weight} kg");
+                    }
+                }
 
-    static void SortNumbers()
-    {
-        Console.Write("Enter numbers separated by commas (e.g., 9, 4, 7, 2, 5): ");
-        string input = Console.ReadLine();
-        int[] numbers = input.Split(',').Select(int.Parse).ToArray();
+                Console.WriteLine("\nO'rta vaznli bokschilar (50 kg dan 76 kg gacha):");
+                foreach (var boxer in boxers)
+                {
+                    if (boxer.Weight > 50 && boxer.Weight <= 76)
+                    {
+                        Console.WriteLine($"{boxer.FirstName} {boxer.LastName} - {boxer.Weight} kg");
+                    }
+                }
 
-        Console.WriteLine("Choose sorting method:");
-        Console.WriteLine("1 - Ascending");
-        Console.WriteLine("2 - Descending");
-        Console.Write("Enter your choice: ");
-        string sortChoice = Console.ReadLine();
-
-        switch (sortChoice)
-        {
-            case "1":
-                Array.Sort(numbers);
-                Console.WriteLine("Ascending Order: " + string.Join(", ", numbers));
-                break;
-
-            case "2":
-                Array.Sort(numbers);
-                Array.Reverse(numbers);
-                Console.WriteLine("Descending Order: " + string.Join(", ", numbers));
+                Console.WriteLine("\nOg'ir vaznli bokschilar (90 kg va undan og'irlar):");
+                foreach (var boxer in boxers)
+                {
+                    if (boxer.Weight >= 90)
+                    {
+                        Console.WriteLine($"{boxer.FirstName} {boxer.LastName} - {boxer.Weight} kg");
+                    }
+                }
                 break;
 
             default:
-                Console.WriteLine("Invalid choice.");
+                Console.WriteLine("Noto'g'ri tanlov.");
                 break;
-        }
-    }
-
-    static void CharacterFrequencyCount()
-    {
-        Console.Write("Enter a text: ");
-        string input = Console.ReadLine();
-        Dictionary<char, int> frequency = new Dictionary<char, int>();
-
-        foreach (char c in input)
-        {
-            if (frequency.ContainsKey(c))
-            {
-                frequency[c]++;
-            }
-            else
-            {
-                frequency[c] = 1;
-            }
-        }
-
-        foreach (var pair in frequency)
-        {
-            Console.WriteLine($"'{pair.Key}': {pair.Value} time(s)");
         }
     }
 }
